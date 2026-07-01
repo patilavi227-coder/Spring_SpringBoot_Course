@@ -1,0 +1,76 @@
+***** Spring and Spring Boot Notes (Coding Shuttle-Anuj Bhaiyaa)*****
+
+######### Module 1 - 1.3 Beans in Spring Framework ########
+
+==> Beans :
+- A Spring Bean is simply a Java object that is:
+	. Instantiated by Spring
+	. Configured by Spring
+	. Managed throughout its lifecycle by Spring
+
+- Beans form the backbone of a Spring application and are the core building blocks that are wired together to create the application.
+
+==> How to create Beans ?
+
+	1. Using @Component (and Stereotype annotations)
+		@Component   // generic bean
+		@Service      // business logic
+		@Repository  // database access	
+		@Controller   // web layer
+		@RestController
+	
+		Above all annotations are extending to the @Component annotation.
+
+	2. Using @Bean in a @Configuration Class
+	
+==> Lifecycle of a Bean : 
+	Bean Created --> Dependency Injected --> Bean Initialised --> Bean is Used --> Bean is Destroyed
+	
+==> Bean Lifecycle Methods : 
+	1. @PostConstruct : The @PostConstruct annotation is used to mark a method that should be invoked immediately after a bean has been constructed and all of its dependencies have been injected.
+	
+	2. @PreDestroy : The @PreDestroy annotation is used to mark a method that should be invoked before a bean is destroyed by the container. This method can perform any neccessary cleanup or resource releasing tasks.
+	
+					
+						1. new MyBean() --> Instantiation
+								|
+								V
+						2. Inject @Autowired --> Populate Properties
+								|
+								V
+						3. setBeanName()           |
+						4. setBeanFactory()        |--> Aware Interfaces
+						5. setApplicationContext() | 
+								|
+								V
+						6. BeanPostProcessor                   |--> Before Init
+							postProcessorBeforeInitialization  |
+								|
+								V
+						7. afterPropertiesSet |--> InitializingBean
+						8. @PostConstruct     |
+								|
+								V
+						9. BeanPostProcessor                  |--> After init
+							postProcessorAfterInitialization  |
+							    |
+								V
+						10. Bean is Ready --> Injected & Used
+								| (on shutdown)
+								V
+						11. @PreDestroy  |
+						12. destroy()    |--> Cleanup
+								|
+								V
+						GC - Object Destroyed
+						
+==> Bean Scopes : 
++------------------+-----------------------------------------------------------------------------+	
+|	Scopes         |               use-case                                                      |
++------------------+-----------------------------------------------------------------------------+	
+1.  singleton	   |		One instance per app, use for Services, repositories                 |
+2.  prototype	   |		New instance every time, user for Stateful objects, request database |
+3.  request		   |		One per HTTP request, use for Web apps only                          |
+4.  application	   |		One per ServletContext, use for Global config                        |
+5.  session		   |		One per user session, use for shopping cart	                         |
++------------------+-----------------------------------------------------------------------------+								
